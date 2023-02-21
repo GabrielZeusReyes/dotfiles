@@ -184,8 +184,9 @@ wezterm.on("update-right-status", function(window)
 end)
 
 return {
+  default_prog ={ 'C:/Program Files/PowerShell/7/pwsh.exe' },
 	font = wezterm.font_with_fallback({
-    "Hack Nerd Font",
+    -- "Hack Nerd Font",
 		"JetBrains Mono",
 	}),
 	font_size = 12,
