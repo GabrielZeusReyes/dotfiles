@@ -184,11 +184,12 @@ wezterm.on("update-right-status", function(window)
 end)
 
 return {
+  default_prog = { 'C:/Program Files/PowerShell/7/pwsh.exe' },
 	font = wezterm.font_with_fallback({
-    "Hack Nerd Font",
+    -- "Hack Nerd Font",
 		"JetBrains Mono",
 	}),
-	font_size = 12,
+	font_size = 11,
 	max_fps = 60,
 	enable_wayland = false,
 	pane_focus_follows_mouse = false,
@@ -205,8 +206,8 @@ return {
 		top = 0,
 		bottom = 0,
 	},
-	initial_cols = 150,
-	initial_rows = 45,
+	initial_cols = 110,
+	initial_rows = 25,
 	inactive_pane_hsb = {
 		saturation = 1.0,
 		brightness = is_dark and 0.85 or 0.95,
