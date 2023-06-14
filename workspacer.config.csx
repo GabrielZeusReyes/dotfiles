@@ -18,43 +18,58 @@ return new Action<IConfigContext>((IConfigContext context) =>
     {
     /* Variables */
     /* Variables */
-    var fontSize = 11;
+    var fontSize = 9;
     var barHeight = 22;
-    var fontName = "JetBrainsMono NF";
-    var background = new Color(0x0, 0x0, 0x0);
+    var fontName = "Cascadia Mono";
+    var background = new Color(0x22, 0x22, 0x22);
+    var foreground = new Color(0xCC, 0xCC, 0xCC);
     var blue = new Color(0x89, 0xB4, 0xFA);
     var orange = new Color(0xFF, 0x62, 0x00);
+
+    // Work Spacer Names
+    var chat = "Talk  ";
+    var work = "Code  ";
+    var web = "Web  ";
+    var mail = "Mail  ";
+    var notes = "Notes  ";
 
     /* Config */
     context.CanMinimizeWindows = true;
 
     /* Gap */
     var gap = barHeight - 12;
-    var gapPlugin = context.AddGap(new GapPluginConfig() { InnerGap = gap, OuterGap = gap / 2, Delta = gap / 2 });
+    // var gapPlugin = context.AddGap(new GapPluginConfig() { InnerGap = gap, OuterGap = gap / 2, Delta = gap / 2 });
 
     /* Bar */
     context.AddBar(new BarPluginConfig()
         {
+        BarTitle = "workspacer.Bar",
         FontSize = fontSize,
         BarHeight = barHeight,
         FontName = fontName,
+        DefaultWidgetForeground = foreground,
         DefaultWidgetBackground = background,
         LeftWidgets = () => new IBarWidget[]
         {
+        new TextWidget(" 🤖 "),
         new WorkspaceWidget() {
         WorkspaceHasFocusColor = orange,
-        }, new TextWidget("| "), new TitleWidget() {
-        IsShortTitle = true,
-        MonitorHasFocusColor = new Color(0x02, 0xF0, 0xFF)
-        }
+        },
+        // new TextWidget("| "), 
         },
         RightWidgets = () => new IBarWidget[]
         {
+        new TitleWidget() {
+        IsShortTitle = true,
+        MonitorHasFocusColor = new Color(0x0, 0x0, 0x0)
+        },
+        new TextWidget(" "),
         new BatteryWidget(),
-        new TextWidget("| "),
-        new TimeWidget(1000, "dd MMMM yyyy HH:mm tt"),
-        new TextWidget("| "),
-        new ActiveLayoutWidget(),
+        new TextWidget(" "),
+        // new TextWidget("| "),
+        new TimeWidget(1000, "dd MMM  hh:mm tt  "),
+        // new TextWidget("| "),
+        // new ActiveLayoutWidget(),
         }
         });
 
@@ -80,11 +95,11 @@ return new Action<IConfigContext>((IConfigContext context) =>
     // Array of workspace names and their layouts
     (string, ILayoutEngine[])[] workspaces =
     {
-      ("chat", defaultLayouts()),
-      ("code", defaultLayouts()),
-      ("email", defaultLayouts()),
-      ("notes", defaultLayouts()),
-      ("browse", defaultLayouts()),
+      (chat, defaultLayouts()),
+      (web, defaultLayouts()),
+      (work, defaultLayouts()),
+      (mail, defaultLayouts()),
+      (notes, defaultLayouts()),
     };
 
     foreach ((string name, ILayoutEngine[] layouts) in workspaces)
@@ -95,15 +110,15 @@ return new Action<IConfigContext>((IConfigContext context) =>
     // Filters
     // Outlook reminders
     context.WindowRouter.AddFilter((window) => !window.Title.Contains("Reminder(s)")); 
-    context.WindowRouter.AddRoute((window) => window.Title.Contains("Reminder(s)") ? context.WorkspaceContainer["chat"] : null);
+    context.WindowRouter.AddRoute((window) => window.Title.Contains("Reminder(s)") ? context.WorkspaceContainer[chat] : null);
 
-    context.WindowRouter.AddRoute((window) => window.Title.Contains("Outlook") ? context.WorkspaceContainer["email"] : null); // Outlook
+    context.WindowRouter.AddRoute((window) => window.Title.Contains("Outlook") ? context.WorkspaceContainer[mail] : null); // Outlook
 
-    context.WindowRouter.AddRoute((window) => window.Title.Contains("Microsoft Teams") ? context.WorkspaceContainer["chat"] : null); // Microsoft Teams
+    context.WindowRouter.AddRoute((window) => window.Title.Contains("Microsoft Teams") ? context.WorkspaceContainer[chat] : null); // Microsoft Teams
 
-    context.WindowRouter.AddRoute((window) => window.Title.Contains("OneNote") ? context.WorkspaceContainer["notes"] : null); // OneNote
-    
-    context.WindowRouter.AddRoute((window) => window.Title.Contains("C:/Program Files/PowerShell/7/pwsh.exe") ? context.WorkspaceContainer["code"] : null); // Powershell
+    context.WindowRouter.AddRoute((window) => window.Title.Contains("OneNote") ? context.WorkspaceContainer[notes] : null); // OneNote
+
+    context.WindowRouter.AddRoute((window) => window.Title.Contains("C:/Program Files/PowerShell/7/pwsh.exe") ? context.WorkspaceContainer[work] : null); // Powershell
 
     /* Action menu */
     // var actionMenu = context.AddActionMenu(new ActionMenuPluginConfig()
@@ -233,11 +248,11 @@ return new Action<IConfigContext>((IConfigContext context) =>
       // context.Keybinds.Subscribe(win, Keys.B, () => System.Diagnostics.Process.Start(@"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"));
       // context.Keybinds.Subscribe(win, Keys.Enter, () => System.Diagnostics.Process.Start(@"C:\Users\iuseg\AppData\Local\Microsoft\WindowsApps\wt.exe"));
 
-      manager.Subscribe(winCtrl, Keys.X, () => gapPlugin.IncrementInnerGap(), "increment inner gap");
-      manager.Subscribe(winCtrl, Keys.Z, () => gapPlugin.DecrementInnerGap(), "decrement inner gap");
-
-      manager.Subscribe(winShift, Keys.X, () => gapPlugin.IncrementOuterGap(), "increment outer gap");
-      manager.Subscribe(winShift, Keys.Z, () => gapPlugin.DecrementOuterGap(), "decrement outer gap");
+      // manager.Subscribe(winCtrl, Keys.X, () => gapPlugin.IncrementInnerGap(), "increment inner gap");
+      // manager.Subscribe(winCtrl, Keys.Z, () => gapPlugin.DecrementInnerGap(), "decrement inner gap");
+      //
+      // manager.Subscribe(winShift, Keys.X, () => gapPlugin.IncrementOuterGap(), "increment outer gap");
+      // manager.Subscribe(winShift, Keys.Z, () => gapPlugin.DecrementOuterGap(), "decrement outer gap");
 
       // // Other shortcuts
       // manager.Subscribe(winCtrl, Keys.P, () => actionMenu.ShowMenu(actionMenuBuilder), "show menu");
